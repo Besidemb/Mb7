@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>MB & Nath — Nosso Cantinho 2.1 💜</title>
+  <title>MB & Nath — Nosso Cantinho 2.2 💜</title>
   <style>
     :root{
       --bg1:#1a0026;
@@ -132,6 +132,7 @@
   </style>
 </head>
 <body>
+  <!-- Som embutido via URL -->
   <audio id="coin-sound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_efad899b2f.mp3?filename=magic-bonus-89070.mp3" preload="auto"></audio>
 
   <div class="app">
@@ -190,7 +191,7 @@
       </main>
     </div>
 
-    <footer>Feito com 💜 por MB & Nath — versão 2.1</footer>
+    <footer>Feito com 💜 por MB & Nath — versão 2.2</footer>
   </div>
 
   <script>
@@ -233,14 +234,27 @@
     btnMB.onclick = ()=>{currentUser='MB';saveData();render();}
     btnNath.onclick = ()=>{currentUser='Nath';saveData();render();}
 
+    // Permite som após primeira interação
+    let soundAllowed = false;
+    document.body.addEventListener('click', ()=>{
+      if(!soundAllowed){
+        coinSound.play().catch(()=>{});
+        coinSound.pause();
+        coinSound.currentTime = 0;
+        soundAllowed = true;
+      }
+    }, {once:true});
+
     heart.onclick = ()=>{
+      if(!soundAllowed) return;
       const ganho = Math.floor(Math.random()*5)+1;
       data[currentUser].saldo += ganho;
       addHistory(`+${ganho} moedas ao clicar no coração ❤️`);
       saveData();
       render();
       lastWin.textContent = `Você ganhou +${ganho} moedas!`;
-      coinSound.currentTime=0;coinSound.play();
+      coinSound.currentTime=0;
+      coinSound.play();
 
       const emoji = document.createElement('div');
       emoji.textContent='💖';
@@ -259,8 +273,8 @@
       }
     }
 
-    // Dias juntos
-    const startDate = new Date(2024,2,16); // 16/03/2024 (mês começa em 0)
+    // Dias juntos desde 16/03/2024
+    const startDate = new Date(2024,2,16);
     function updateDays(){
       const now = new Date();
       const diff = Math.floor((now - startDate)/(1000*60*60*24));
@@ -272,4 +286,5 @@
   </script>
 </body>
 </html>
+
 
